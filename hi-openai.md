@@ -1,50 +1,6 @@
-pyenv: pip: command not found
+## Hello OpenAI API
 
-The `pip' command exists in these Python versions:
-  3.10.16
-
-Note: See 'pyenv help global' for tips on allowing both
-      python2 and python3 to be found.
-
-This error occurs when pip isn't available in your current Python environment. Since pyenv shows that pip exists in Python 3.10.16, here are a few steps to resolve this:
-
-1. Either set Python 3.10.16 as your global Python version:
-```bash
-pyenv global 3.10.16
-```
-
-2. Or activate Python 3.10.16 for your current shell session:
-```bash
-pyenv shell 3.10.16
-```
-
-After doing either of these, pip should be available. You can verify by running:
-```bash
-pip --version
-```
-
-If you still have issues, you might need to rehash pyenv to update its shims:
-```bash
-pyenv rehash
-```
-
-  raise self._make_status_error_from_response(err.response) from None
-openai.RateLimitError: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
-
-Buy credits
-
-Ah, you need to install the `python-dotenv` package first. Run this command:
-
-```bash
-pip install python-dotenv
-```
-
-If that doesn't work (due to pip issues with pyenv that you mentioned earlier), you can try:
-```bash
-python -m pip install python-dotenv
-```
-
-Or if you want a simpler version of the program without using dotenv, here's an alternative:
+If you want a simpler version of the program without using dotenv:
 
 ```python
 import os
@@ -110,6 +66,7 @@ You can customize the date format by modifying the `strftime` format string. Som
 
 https://platform.openai.com/docs/api-reference/models
 
+```
 Available OpenAI Models:
 Total models: 42
 --------------------------------------------------
@@ -281,3 +238,4 @@ ID: text-embedding-3-large
 Created: 2024-01-22 14:53:00
 Owner: system
 --------------------------------------------------
+```
