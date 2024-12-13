@@ -2,8 +2,15 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 import json
+from pathlib import Path
 
-load_dotenv()
+# Get the project root directory
+root_dir = Path(__file__).resolve().parent.parent
+dotenv_path = os.path.join(root_dir, '.env')
+
+# Load the .env file
+load_dotenv(dotenv_path)
+
 api_key = os.getenv('OPENAI_API_KEY')
 
 client = OpenAI()
