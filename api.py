@@ -1,9 +1,12 @@
 import os
 from openai import OpenAI
 from datetime import datetime
+from dotenv import load_dotenv
 
-# Initialize the client with API key directly from environment variable
-client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+
+client = OpenAI(api_key=api_key)
 
 # List all models
 try:
