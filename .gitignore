@@ -1,3 +1,4 @@
 creds.md
 ptest/
 .env
+__pycache__/
