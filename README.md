@@ -6,3 +6,16 @@ The other folders are code from deeplearning.ai that has been updated to work wi
 
 The completion.py makes a direct API call to OpenAI. It shows how to view the structure of the returned response. This is useful when you want to navigate the response object and extract the answer.
 
+- cust.py uses prompt template to make direct OpenAI call
+- hichain.py uses prompt template with langchain API
+- hi-chain.py uses a prompt with langchain API
+- api.py lists all the OpenAI models. If you can run this, OpenAI APi credentials are setup correctly.
+- version.py prints the version of python used
+
+## Install Dependencies
+
+Run:
+
+```
+pip install -r requirements.txt
+```
