@@ -5,10 +5,7 @@ import os
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from creds import API_KEY
-
-openai.api_key = API_KEY
+from creds import openai
 
 customer_email = """
 Arrr, I be fuming that me blender lid \

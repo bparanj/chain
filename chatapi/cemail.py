@@ -2,13 +2,9 @@ from langchain_openai import ChatOpenAI
 
 import os
 import sys
-import openai
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from creds import API_KEY
-
-openai.api_key = API_KEY
+from creds import openai
 
 # Initialize the chat model - removed the model parameter since it's not defined
 chat = ChatOpenAI(temperature=0.0)
