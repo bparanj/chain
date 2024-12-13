@@ -1,6 +1,6 @@
 ## Hello OpenAI API
 
-If you want a simpler version of the program without using dotenv:
+A simpler version of the program without using dotenv:
 
 ```python
 import os
