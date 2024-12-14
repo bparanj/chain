@@ -22,9 +22,6 @@ from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv()) # read local .env file
 ```
 
-Note: LLM's do not always produce the same results. When executing the code in your notebook, you may get slightly different answers that those in the video.
-
-
 ```python
 # account for deprecation of LLM model
 import datetime
@@ -84,6 +81,7 @@ prompt = ChatPromptTemplate.from_template(
 chain = LLMChain(llm=llm, prompt=prompt)
 ```
 
+Continue from here:
 
 ```python
 product = "Queen Size Sheet Set"
@@ -223,7 +221,7 @@ first_prompt = ChatPromptTemplate.from_template(
     "\n\n{Review}"
 )
 # chain 1: input= Review and output= English_Review
-chain_one = LLMChain(llm=llm, prompt=first_prompt, 
+chain_one = LLMChain(llm=llm, prompt=first_prompt,
                      output_key="English_Review"
                     )
 
@@ -236,7 +234,7 @@ second_prompt = ChatPromptTemplate.from_template(
     "\n\n{English_Review}"
 )
 # chain 2: input= English_Review and output= summary
-chain_two = LLMChain(llm=llm, prompt=second_prompt, 
+chain_two = LLMChain(llm=llm, prompt=second_prompt,
                      output_key="summary"
                     )
 
@@ -273,7 +271,7 @@ chain_four = LLMChain(llm=llm, prompt=fourth_prompt,
 
 
 ```python
-# overall_chain: input= Review 
+# overall_chain: input= Review
 # and output= English_Review,summary, followup_message
 overall_chain = SequentialChain(
     chains=[chain_one, chain_two, chain_three, chain_four],
@@ -376,7 +374,7 @@ Here is a question:
 math_template = """You are a very good mathematician. \
 You are great at answering math questions. \
 You are so good because you are able to break down \
-hard problems into their component parts, 
+hard problems into their component parts,
 answer the component parts, and then put them together\
 to answer the broader question.
 
@@ -404,7 +402,7 @@ You are so good because you know how to solve a problem by \
 describing the solution in imperative steps \
 that a machine can easily interpret and you know how to \
 choose a solution that has a good balance between \
-time complexity and space complexity. 
+time complexity and space complexity.
 
 Here is a question:
 {input}"""
@@ -414,23 +412,23 @@ Here is a question:
 ```python
 prompt_infos = [
     {
-        "name": "physics", 
-        "description": "Good for answering questions about physics", 
+        "name": "physics",
+        "description": "Good for answering questions about physics",
         "prompt_template": physics_template
     },
     {
-        "name": "math", 
-        "description": "Good for answering math questions", 
+        "name": "math",
+        "description": "Good for answering math questions",
         "prompt_template": math_template
     },
     {
-        "name": "History", 
-        "description": "Good for answering history questions", 
+        "name": "History",
+        "description": "Good for answering history questions",
         "prompt_template": history_template
     },
     {
-        "name": "computer science", 
-        "description": "Good for answering computer science questions", 
+        "name": "computer science",
+        "description": "Good for answering computer science questions",
         "prompt_template": computerscience_template
     }
 ]
@@ -457,8 +455,8 @@ for p_info in prompt_infos:
     prompt_template = p_info["prompt_template"]
     prompt = ChatPromptTemplate.from_template(template=prompt_template)
     chain = LLMChain(llm=llm, prompt=prompt)
-    destination_chains[name] = chain  
-    
+    destination_chains[name] = chain
+
 destinations = [f"{p['name']}: {p['description']}" for p in prompt_infos]
 destinations_str = "\n".join(destinations)
 ```
@@ -518,8 +516,8 @@ router_chain = LLMRouterChain.from_llm(llm, router_prompt)
 
 
 ```python
-chain = MultiPromptChain(router_chain=router_chain, 
-                         destination_chains=destination_chains, 
+chain = MultiPromptChain(router_chain=router_chain,
+                         destination_chains=destination_chains,
                          default_chain=default_chain, verbose=True
                         )
 ```
@@ -558,7 +556,7 @@ Here is a question:
 math_template = """You are a very good mathematician. \
 You are great at answering math questions. \
 You are so good because you are able to break down \
-hard problems into their component parts, 
+hard problems into their component parts,
 answer the component parts, and then put them together\
 to answer the broader question.
 
@@ -585,7 +583,7 @@ You are so good because you know how to solve a problem by \
 describing the solution in imperative steps \
 that a machine can easily interpret and you know how to \
 choose a solution that has a good balance between \
-time complexity and space complexity. 
+time complexity and space complexity.
 
 Here is a question:
 {input}"""
@@ -593,23 +591,23 @@ Here is a question:
 # Define prompt information
 prompt_infos = [
     {
-        "name": "physics", 
-        "description": "Good for answering questions about physics", 
+        "name": "physics",
+        "description": "Good for answering questions about physics",
         "prompt_template": physics_template
     },
     {
-        "name": "math", 
-        "description": "Good for answering math questions", 
+        "name": "math",
+        "description": "Good for answering math questions",
         "prompt_template": math_template
     },
     {
-        "name": "History", 
-        "description": "Good for answering history questions", 
+        "name": "History",
+        "description": "Good for answering history questions",
         "prompt_template": history_template
     },
     {
-        "name": "computer science", 
-        "description": "Good for answering computer science questions", 
+        "name": "computer science",
+        "description": "Good for answering computer science questions",
         "prompt_template": computerscience_template
     }
 ]
@@ -627,7 +625,7 @@ for p_info in prompt_infos:
     prompt_template = p_info["prompt_template"]
     prompt = ChatPromptTemplate.from_template(template=prompt_template)
     chain = LLMChain(llm=llm, prompt=prompt)
-    destination_chains[name] = chain  
+    destination_chains[name] = chain
 
 # Create destinations string
 destinations = [f"{p['name']}: {p['description']}" for p in prompt_infos]
