@@ -112,65 +112,8 @@ memory.load_memory_variables({})
 ```
 
 Here's the updated code for OpenAI 1.57 and LangChain 0.3:
+Refer memory/memory.py
 
-```python
-from langchain_openai import ChatOpenAI
-from langchain_core.prompts import MessagesPlaceholder
-from langchain.chains.conversation.base import ConversationChain
-from langchain.memory import ConversationBufferMemory
-
-# Initialize the model - no need for llm_model parameter
-llm = ChatOpenAI(temperature=0.0)
-
-# Initialize memory
-memory = ConversationBufferMemory(return_messages=True)
-
-# Create conversation chain
-conversation = ConversationChain(
-    llm=llm,
-    memory=memory,
-    verbose=True
-)
-
-# Make predictions
-conversation.predict(input="Hi, my name is Andrew")
-conversation.predict(input="What is 1+1?")
-conversation.predict(input="What is my name?")
-
-# View memory contents
-print(memory.buffer)
-
-# Load memory variables
-memory.load_memory_variables({})
-
-# Create new memory instance
-memory = ConversationBufferMemory(return_messages=True)
-
-# Save context to memory
-memory.save_context({"input": "Hi"},
-                   {"output": "What's up"})
-
-# View buffer
-print(memory.buffer)
-
-# Load memory variables
-memory.load_memory_variables({})
-
-# Save more context
-memory.save_context({"input": "Not much, just hanging"},
-                   {"output": "Cool"})
-
-# Load final memory state
-memory.load_memory_variables({})
-```
-
-changes:
-1. Changed `langchain.chat_models` to `langchain_openai`
-2. Added `return_messages=True` to ConversationBufferMemory for compatibility with newer versions
-3. Removed the `llm_model` parameter as it's not needed (it will use gpt-3.5-turbo by default)
-4. Added import for `MessagesPlaceholder` from `langchain_core.prompts`
-
-Make sure you have the required packages installed:
 ```bash
 pip install langchain-openai langchain-core
 ```
@@ -179,6 +122,8 @@ And your OpenAI API key set in environment variables:
 ```bash
 export OPENAI_API_KEY='your-api-key-here'
 ```
+
+Continue from here:
 
 ## ConversationBufferWindowMemory
 
