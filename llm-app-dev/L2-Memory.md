@@ -48,7 +48,7 @@ from langchain.memory import ConversationBufferMemory
 llm = ChatOpenAI(temperature=0.0, model=llm_model)
 memory = ConversationBufferMemory()
 conversation = ConversationChain(
-    llm=llm, 
+    llm=llm,
     memory = memory,
     verbose=True
 )
@@ -86,7 +86,7 @@ memory = ConversationBufferMemory()
 
 
 ```python
-memory.save_context({"input": "Hi"}, 
+memory.save_context({"input": "Hi"},
                     {"output": "What's up"})
 ```
 
@@ -102,7 +102,7 @@ memory.load_memory_variables({})
 
 
 ```python
-memory.save_context({"input": "Not much, just hanging"}, 
+memory.save_context({"input": "Not much, just hanging"},
                     {"output": "Cool"})
 ```
 
@@ -147,7 +147,7 @@ memory.load_memory_variables({})
 memory = ConversationBufferMemory(return_messages=True)
 
 # Save context to memory
-memory.save_context({"input": "Hi"}, 
+memory.save_context({"input": "Hi"},
                    {"output": "What's up"})
 
 # View buffer
@@ -157,14 +157,14 @@ print(memory.buffer)
 memory.load_memory_variables({})
 
 # Save more context
-memory.save_context({"input": "Not much, just hanging"}, 
+memory.save_context({"input": "Not much, just hanging"},
                    {"output": "Cool"})
 
 # Load final memory state
 memory.load_memory_variables({})
 ```
 
-Key changes:
+changes:
 1. Changed `langchain.chat_models` to `langchain_openai`
 2. Added `return_messages=True` to ConversationBufferMemory for compatibility with newer versions
 3. Removed the `llm_model` parameter as it's not needed (it will use gpt-3.5-turbo by default)
@@ -189,7 +189,7 @@ from langchain.memory import ConversationBufferWindowMemory
 
 
 ```python
-memory = ConversationBufferWindowMemory(k=1)               
+memory = ConversationBufferWindowMemory(k=1)
 ```
 
 
@@ -211,7 +211,7 @@ memory.load_memory_variables({})
 llm = ChatOpenAI(temperature=0.0, model=llm_model)
 memory = ConversationBufferWindowMemory(k=1)
 conversation = ConversationChain(
-    llm=llm, 
+    llm=llm,
     memory = memory,
     verbose=False
 )
@@ -297,7 +297,7 @@ memory.save_context({"input": "AI is what?!"},
                     {"output": "Amazing!"})
 memory.save_context({"input": "Backpropagation is what?"},
                     {"output": "Beautiful!"})
-memory.save_context({"input": "Chatbots are what?"}, 
+memory.save_context({"input": "Chatbots are what?"},
                     {"output": "Charming!"})
 ```
 
@@ -328,7 +328,7 @@ memory = ConversationSummaryBufferMemory(llm=llm, max_token_limit=100)
 memory.save_context({"input": "Hello"}, {"output": "What's up"})
 memory.save_context({"input": "Not much, just hanging"},
                     {"output": "Cool"})
-memory.save_context({"input": "What is on the schedule today?"}, 
+memory.save_context({"input": "What is on the schedule today?"},
                     {"output": f"{schedule}"})
 ```
 
@@ -340,7 +340,7 @@ memory.load_memory_variables({})
 
 ```python
 conversation = ConversationChain(
-    llm=llm, 
+    llm=llm,
     memory = memory,
     verbose=True
 )
@@ -392,7 +392,7 @@ memory.save_context(
     {"output": "Cool"}
 )
 memory.save_context(
-    {"input": "What is on the schedule today?"}, 
+    {"input": "What is on the schedule today?"},
     {"output": f"{schedule}"}
 )
 
