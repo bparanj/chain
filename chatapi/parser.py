@@ -1,11 +1,13 @@
+
 import os
 import openai
-from langchain.chat_models import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
 from langchain.output_parsers import ResponseSchema, StructuredOutputParser
+import sys
 
-# Set your OpenAI API key
-openai.api_key = "YOUR_OPENAI_API_KEY"
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from creds import openai
 
 # Define your review text
 customer_review = """\
@@ -62,7 +64,7 @@ messages = prompt.format_messages(text=customer_review, format_instructions=form
 chat = ChatOpenAI(temperature=0.0, model_name="gpt-3.5-turbo")
 
 # Get the response from the LLM
-response = chat(messages)
+response = chat.invoke(messages)
 
 # Parse the output into a dictionary
 output_dict = output_parser.parse(response.content)
