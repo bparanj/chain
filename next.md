@@ -1,38 +1,6 @@
-```python
-service_reply = """Hey there customer, \
-the warranty does not cover \
-cleaning expenses for your kitchen \
-because it's your fault that \
-you misused your blender \
-by forgetting to put the lid on before \
-starting the blender. \
-Tough luck! See ya!
-"""
-```
 
 
-```python
-service_style_pirate = """\
-a polite tone \
-that speaks in English Pirate\
-"""
-```
-
-
-```python
-service_messages = prompt_template.format_messages(
-    style=service_style_pirate,
-    text=service_reply)
-
-print(service_messages[0].content)
-```
-
-
-```python
-service_response = chat(service_messages)
-print(service_response.content)
-```
-
+- run warranty.py
 
 ## Output Parsers
 
