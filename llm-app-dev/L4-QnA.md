@@ -93,6 +93,62 @@ response = index.query(query,
 display(Markdown(response))
 ```
 
+from langchain_community.chat_models import ChatOpenAI
+from langchain_community.document_loaders import CSVLoader
+from langchain_community.vectorstores import DocArrayInMemorySearch
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+from langchain.text_splitter import CharacterTextSplitter
+from langchain_community.embeddings import OpenAIEmbeddings
+from IPython.display import display, Markdown
+
+# Load the CSV file
+file = 'OutdoorClothingCatalog_1000.csv'
+loader = CSVLoader(file_path=file)
+documents = loader.load()
+
+# Split documents into chunks
+text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+splits = text_splitter.split_documents(documents)
+
+# Create vector store
+embeddings = OpenAIEmbeddings()
+vectorstore = DocArrayInMemorySearch.from_documents(splits, embeddings)
+retriever = vectorstore.as_retriever()
+
+# Create the prompt template
+template = """Answer the following question based only on the provided context:
+
+Context: {context}
+
+Question: {question}
+
+Answer in markdown format."""
+
+prompt = ChatPromptTemplate.from_template(template)
+
+# Initialize the model
+model = ChatOpenAI(
+    temperature=0,
+    model="gpt-3.5-turbo"
+)
+
+# Create the RAG chain
+chain = (
+    {"context": retriever, "question": RunnablePassthrough()}
+    | prompt
+    | model
+    | StrOutputParser()
+)
+
+# Example query
+query = "Please list all your shirts with sun protection in a table in markdown and summarize each one."
+response = chain.invoke(query)
+
+# Display the response
+display(Markdown(response))
+
 ## Step By Step
 
 
@@ -227,34 +283,112 @@ index = VectorstoreIndexCreator(
 ).from_loaders([loader])
 ```
 
-Reminder: Download your notebook to you local computer to save your work.
+from langchain_community.document_loaders import CSVLoader
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.vectorstores import DocArrayInMemorySearch
+from langchain_community.chat_models import ChatOpenAI
+from langchain.chains import RetrievalQA
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
+from IPython.display import display, Markdown
 
+# Load CSV documents
+file = 'OutdoorClothingCatalog_1000.csv'  # Replace with your file path
+loader = CSVLoader(file_path=file)
+docs = loader.load()
 
-```python
+# Print first document
+print("First document:", docs[0])
 
-```
+# Create embeddings
+embeddings = OpenAIEmbeddings()
 
+# Test embedding
+test_embed = embeddings.embed_query("Hi my name is Harrison")
+print("Embedding length:", len(test_embed))
+print("First 5 embedding values:", test_embed[:5])
 
-```python
+# Create vector store
+db = DocArrayInMemorySearch.from_documents(
+    docs, 
+    embeddings
+)
 
-```
+# Test similarity search
+query = "Please suggest a shirt with sunblocking"
+similar_docs = db.similarity_search(query)
+print("Number of similar documents:", len(similar_docs))
+print("First similar document:", similar_docs[0])
 
+# Create retriever
+retriever = db.as_retriever()
 
-```python
+# Initialize ChatOpenAI
+llm = ChatOpenAI(
+    temperature=0.0,
+    model="gpt-3.5-turbo"  # Replace with your preferred model
+)
 
-```
+# Method 1: Direct LLM call with concatenated documents
+qdocs = "".join([doc.page_content for doc in similar_docs])
+prompt_template = """Based on the following product information:
+{context}
 
+Question: {question}
 
-```python
+Please provide the answer in markdown format."""
 
-```
+prompt = ChatPromptTemplate.from_template(prompt_template)
 
+# Create a chain for direct LLM calls
+direct_chain = (
+    {"context": lambda x: qdocs, "question": RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser()
+)
 
-```python
+# Method 2: RetrievalQA
+qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",
+    retriever=retriever,
+    verbose=True,
+    return_source_documents=True
+)
 
-```
+# Example query
+query = "Please list all your shirts with sun protection in a table in markdown and summarize each one."
 
+# Get responses using different methods
+print("\nMethod 1: Direct LLM Response")
+direct_response = direct_chain.invoke(query)
+display(Markdown(direct_response))
 
-```python
+print("\nMethod 2: RetrievalQA Response")
+qa_response = qa_chain.invoke({"query": query})
+display(Markdown(qa_response['result']))
 
-```
+# Optional: Create a RAG chain combining both approaches
+combined_prompt = ChatPromptTemplate.from_template("""
+You are a helpful shopping assistant. Based on the retrieved product information:
+
+{context}
+
+Please answer the following question in detail and in markdown format:
+{question}
+
+Make sure to include all relevant product details and format tables appropriately.
+""")
+
+rag_chain = (
+    {"context": retriever, "question": RunnablePassthrough()}
+    | combined_prompt
+    | llm
+    | StrOutputParser()
+)
+
+print("\nRAG Chain Response")
+rag_response = rag_chain.invoke(query)
+display(Markdown(rag_response))

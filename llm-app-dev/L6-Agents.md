@@ -179,49 +179,76 @@ except:
     print("exception on external access")
 ```
 
-Reminder: Download your notebook to you local computer to save your work.
+----
 
+from langchain_community.chat_models import ChatOpenAI
+from langchain_community.tools.python.tool import PythonREPLTool
+from langchain_community.utilities.python import PythonREPL
+from langchain_community.tools import WikipediaQueryRun
+from langchain_community.utilities import WikipediaAPIWrapper
+from langchain.agents import AgentExecutor, create_react_agent
+from langchain_core.tools import Tool
+from langchain_core.prompts import PromptTemplate
+from datetime import date
+import operator
 
-```python
+# Initialize the chat model
+llm = ChatOpenAI(
+    temperature=0,
+    model="gpt-3.5-turbo"
+)
 
+# Create tools
+def create_tools():
+    # Wikipedia tool
+    wikipedia = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
+    
+    # Python REPL tool
+    python_repl = PythonREPLTool()
+    
+    # Custom date tool
+    def get_current_date(text: str) -> str:
+        """Returns today's date. Input should be an empty string."""
+        return str(date.today())
+    
+    date_tool = Tool(
+        name="Current Date",
+        func=get_current_date,
+        description="Returns today's date. Use this for date-related queries."
+    )
+    
+    # Math tool
+    def calculator(expression: str) -> float:
+        """Evaluates a mathematical expression."""
+        try:
+            return eval(expression, {"__builtins__": {}}, {
+                "abs": abs, "float": float, "int": int,
+                "pow": pow, "round": round, "operator": operator
+            })
+        except Exception as e:
+            return f"Error: {str(e)}"
+    
+    math_tool = Tool(
+        name="Calculator",
+        func=calculator,
+        description="Useful for mathematical calculations"
+    )
+    
+    return [wikipedia, python_repl, date_tool, math_tool]
+
+# Create the agent prompt
+prompt_template = """You are a helpful AI assistant with access to various tools.
+You should help the user with their questions and tasks using these tools when necessary.
+
+Tools available:
+{tools}
+
+To use a tool, use the following format:
+```
+Thought: I need to figure out...
+Action: tool_name
+Action Input: input to tool
+Observation: tool output
 ```
 
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
+Begin! Remember to be helpful and thorough.
