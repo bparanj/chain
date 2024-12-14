@@ -1,6 +1,14 @@
+## Prompt
 
+Update the code below to work with OpenAI version 1.57 and LangChain 0.3:
+
+## Tasks
 
 - run warranty.py
+- run parser.py
+
+
+Delete the entire section below after getting parser.py to work:
 
 ## Output Parsers
 
@@ -127,61 +135,3 @@ print(format_instructions)
 ```
 
 
-```python
-review_template_2 = """\
-For the following text, extract the following information:
-
-gift: Was the item purchased as a gift for someone else? \
-Answer True if yes, False if not or unknown.
-
-delivery_days: How many days did it take for the product\
-to arrive? If this information is not found, output -1.
-
-price_value: Extract any sentences about the value or price,\
-and output them as a comma separated Python list.
-
-text: {text}
-
-{format_instructions}
-"""
-
-prompt = ChatPromptTemplate.from_template(template=review_template_2)
-
-messages = prompt.format_messages(text=customer_review, 
-                                format_instructions=format_instructions)
-```
-
-
-```python
-print(messages[0].content)
-```
-
-
-```python
-response = chat(messages)
-```
-
-
-```python
-print(response.content)
-```
-
-
-```python
-output_dict = output_parser.parse(response.content)
-```
-
-
-```python
-output_dict
-```
-
-
-```python
-type(output_dict)
-```
-
-
-```python
-output_dict.get('delivery_days')
-```
