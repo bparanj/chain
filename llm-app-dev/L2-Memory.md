@@ -179,42 +179,7 @@ conversation.predict(input="What is my name?")
 
 Here's the updated code for OpenAI 1.57 and LangChain 0.3:
 
-```python
-from langchain_openai import ChatOpenAI
-from langchain.chains.conversation.base import ConversationChain
-from langchain.memory import ConversationBufferWindowMemory
-
-# Initialize window memory with k=1
-memory = ConversationBufferWindowMemory(k=1, return_messages=True)
-
-# Save contexts
-memory.save_context({"input": "Hi"},
-                   {"output": "What's up"})
-memory.save_context({"input": "Not much, just hanging"},
-                   {"output": "Cool"})
-
-# Load memory variables
-memory.load_memory_variables({})
-
-# Initialize chat and conversation with window memory
-llm = ChatOpenAI(temperature=0.0)  # removed llm_model parameter
-memory = ConversationBufferWindowMemory(k=1, return_messages=True)
-conversation = ConversationChain(
-    llm=llm,
-    memory=memory,
-    verbose=False
-)
-
-# Make predictions
-conversation.predict(input="Hi, my name is Andrew")
-conversation.predict(input="What is 1+1?")
-conversation.predict(input="What is my name?")
-```
-
-Key changes:
-1. Changed import to `from langchain_openai import ChatOpenAI`
-2. Added `return_messages=True` to ConversationBufferWindowMemory instances
-3. Removed the `llm_model` parameter as it's not needed
+Refer memory/window.py.
 
 Make sure you have installed:
 ```bash
@@ -301,67 +266,4 @@ conversation.predict(input="What would be a good demo to show?")
 memory.load_memory_variables({})
 ```
 
-from langchain_community.chat_models import ChatOpenAI
-from langchain_core.prompts import MessagesPlaceholder
-from langchain.memory import ConversationSummaryBufferMemory
-from langchain_core.prompts import ChatPromptTemplate
-from langchain.chains import LLMChain
-import os
 
-# Initialize the LLM
-llm = ChatOpenAI(
-    temperature=0.7,
-    model="gpt-3.5-turbo"  # or "gpt-4" if you prefer
-)
-
-# Create a long string
-schedule = "There is a meeting at 8am with your product team. \
-You will need your powerpoint presentation prepared. \
-9am-12pm have time to work on your LangChain \
-project which will go quickly because Langchain is such a powerful tool. \
-At Noon, lunch at the italian resturant with a customer who is driving \
-from over an hour away to meet you to understand the latest in AI. \
-Be sure to bring your laptop to show the latest LLM demo."
-
-# Initialize memory
-memory = ConversationSummaryBufferMemory(
-    llm=llm,
-    max_token_limit=100,
-    return_messages=True  # Important: This is required in newer versions
-)
-
-# Save contexts
-memory.save_context({"input": "Hello"}, {"output": "What's up"})
-memory.save_context(
-    {"input": "Not much, just hanging"},
-    {"output": "Cool"}
-)
-memory.save_context(
-    {"input": "What is on the schedule today?"},
-    {"output": f"{schedule}"}
-)
-
-# Load memory variables
-memory_variables = memory.load_memory_variables({})
-
-# Create prompt template
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful AI assistant."),
-    MessagesPlaceholder(variable_name="history"),
-    ("human", "{input}"),
-])
-
-# Create conversation chain
-conversation = LLMChain(
-    llm=llm,
-    prompt=prompt,
-    memory=memory,
-    verbose=True
-)
-
-# Make a prediction
-response = conversation.invoke({"input": "What would be a good demo to show?"})
-print(response['text'])
-
-# Load final memory state
-final_memory = memory.load_memory_variables({})
