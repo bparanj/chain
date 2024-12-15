@@ -8,7 +8,22 @@ All the documents in llm-app-dev is upgraded to latest by Claude.
 
 - Continue to test the following code examples:
 
+import pandas as pd
+df = pd.read_csv('Data.csv')
+```
 
+
+```python
+df.head()
+```
+
+
+
+# Accessing final output
+if "output" in response:
+    print(response["output"])  # Replace 'output' with the correct key after debugging
+else:
+    print("Response structure unexpected. Debug the output.")
 
 ----
 
