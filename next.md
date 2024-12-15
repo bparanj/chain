@@ -8,48 +8,7 @@ All the documents in llm-app-dev is upgraded to latest by Claude.
 
 - Continue to test the following code examples:
 
-from langchain.chat_models import ChatOpenAI
-from langchain.prompts.chat import ChatPromptTemplate
-from langchain.chains import LLMChain, SimpleSequentialChain
 
-# Initialize the chat model
-llm = ChatOpenAI(
-    temperature=0.9,
-    model="gpt-3.5-turbo"  # Replace with your preferred model
-)
-
-# Prompt template 1
-first_prompt = ChatPromptTemplate.from_template(
-    "What is the best name to describe a company that makes {product}?"
-)
-
-chain_one = LLMChain(llm=llm, prompt=first_prompt)
-
-# Prompt template 2
-second_prompt = ChatPromptTemplate.from_template(
-    "Write a 20-word description for the following company: {company_name}"
-)
-
-chain_two = LLMChain(llm=llm, prompt=second_prompt)
-
-# Combine chains
-overall_simple_chain = SimpleSequentialChain(
-    chains=[chain_one, chain_two],
-    verbose=True
-)
-
-# Run the combined chain
-product = "Queen Size Sheet Set"  # Example product
-response = overall_simple_chain.invoke({"product": product})
-
-# Debugging response structure
-print(response)  # Check the full response structure
-
-# Accessing final output
-if "output" in response:
-    print(response["output"])  # Replace 'output' with the correct key after debugging
-else:
-    print("Response structure unexpected. Debug the output.")
 
 ----
 
@@ -373,7 +332,7 @@ print("First 5 embedding values:", test_embed[:5])
 
 # Create vector store
 db = DocArrayInMemorySearch.from_documents(
-    docs, 
+    docs,
     embeddings
 )
 
@@ -496,7 +455,7 @@ llm = ChatOpenAI(
 )
 
 # Create custom prompt template
-prompt_template = """Use the following pieces of context to answer the question at the end. 
+prompt_template = """Use the following pieces of context to answer the question at the end.
 If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
 Context: {context}
@@ -547,10 +506,10 @@ def run_qa_tests(qa_chain, test_examples):
         print(f"\nRunning test {i + 1}:")
         print(f"Query: {example['query']}")
         print(f"Expected Answer: {example['answer']}")
-        
+
         response = qa_chain({"query": example['query']})
         print(f"Actual Answer: {response['result']}")
-        
+
         results.append({
             "query": example['query'],
             "expected": example['answer'],
@@ -623,7 +582,7 @@ llm = ChatOpenAI(
 )
 
 # Create custom prompt template
-prompt_template = """Use the following pieces of context to answer the question at the end. 
+prompt_template = """Use the following pieces of context to answer the question at the end.
 If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
 Context: {context}
@@ -676,10 +635,10 @@ def run_qa_tests(qa_chain, test_examples):
         print(f"\nRunning test {i + 1}:")
         print(f"Query: {example['query']}")
         print(f"Expected Answer: {example['answer']}")
-        
+
         response = qa_chain({"query": example['query']})
         print(f"Actual Answer: {response['result']}")
-        
+
         results.append({
             "query": example['query'],
             "expected": example['answer'],
@@ -753,7 +712,7 @@ llm = ChatOpenAI(
 )
 
 # Create custom prompt template
-prompt_template = """Use the following pieces of context to answer the question at the end. 
+prompt_template = """Use the following pieces of context to answer the question at the end.
 If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
 Context: {context}
@@ -806,10 +765,10 @@ def run_qa_tests(qa_chain, test_examples):
         print(f"\nRunning test {i + 1}:")
         print(f"Query: {example['query']}")
         print(f"Expected Answer: {example['answer']}")
-        
+
         response = qa_chain({"query": example['query']})
         print(f"Actual Answer: {response['result']}")
-        
+
         results.append({
             "query": example['query'],
             "expected": example['answer'],
