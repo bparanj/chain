@@ -6,6 +6,7 @@ All the documents in llm-app-dev is upgraded to latest by Claude.
 
 ## Tasks
 
+- Look at retrieval.py and compare the output and setps with the first video in Question and Answer section.
 - Continue to test the following code examples:
 
 import pandas as pd
@@ -16,12 +17,6 @@ df = pd.read_csv('Data.csv')
 ```python
 df.head()
 ```
-
-
-----
-
-
-
 
 ----
 
